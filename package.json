@@ -1,0 +1,20 @@
+{
+  "name": "idc-insight",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "IDC 机房数字孪生 —— 服务器机架 + Leaf-Spine 网络 3D 可视化",
+  "scripts": {
+    "dev": "vite",
+    "api": "node server/server.js",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "npm run build && node server/server.js"
+  },
+  "dependencies": {
+    "three": "^0.169.0"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}

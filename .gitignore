@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.npm-cache/
+cmdb.db
+cmdb.db-wal
+cmdb.db-shm
+*.log

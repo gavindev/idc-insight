@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IDC 机房数字孪生 · Leaf-Spine</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div id="scene-container"></div>
+
+      <!-- 顶栏 -->
+      <header id="topbar">
+        <div class="brand">
+          <span class="logo">▣</span>
+          <div class="brand-text">
+            <h1>IDC 机房数字孪生</h1>
+            <p>Leaf-Spine 网络 · 5 排机柜 · 实时状态</p>
+          </div>
+        </div>
+
+        <div id="stats" class="stats"></div>
+
+        <div class="toolbar">
+          <div class="search">
+            <input id="ip-search" type="text" placeholder="输入 IP 定位设备…" spellcheck="false" />
+            <button id="btn-search" class="btn">定位</button>
+          </div>
+          <button id="btn-overview" class="btn" title="回到整个机房总览视角">⌂ 总览</button>
+          <button id="btn-tour" class="btn" title="自动巡检机房">▶ 巡检</button>
+          <button id="btn-fault" class="btn btn-warn" title="随机模拟一批故障/告警">⚡ 模拟故障</button>
+          <button id="btn-reset" class="btn btn-ok" title="所有设备恢复正常">✓ 恢复全部</button>
+        </div>
+      </header>
+
+      <!-- 图例 -->
+      <aside id="legend" class="legend">
+        <div class="legend-title">状态图例</div>
+        <div class="legend-row">
+          <span class="swatch sw-normal"></span><span>正常</span>
+        </div>
+        <div class="legend-row">
+          <span class="swatch sw-warning"></span><span>告警（需关注）</span>
+        </div>
+        <div class="legend-row">
+          <span class="swatch sw-fault"></span><span>故障（需处理）</span>
+        </div>
+        <div class="legend-divider"></div>
+        <div class="legend-row muted">▤ 机柜 / 服务器</div>
+        <div class="legend-row muted">◧ 交换机（Leaf / Spine / Edge / MGMT）</div>
+        <div class="legend-divider"></div>
+        <div class="legend-title">网络分层（点击开关）</div>
+        <div id="plane-toggles"></div>
+      </aside>
+
+      <!-- 详情面板 -->
+      <aside id="panel" class="panel hidden"></aside>
+
+      <!-- 悬浮提示 -->
+      <div id="tooltip" class="tooltip hidden"></div>
+
+      <!-- 轻提示 -->
+      <div id="toast" class="toast hidden"></div>
+
+      <!-- 操作提示 -->
+      <div id="hint" class="hint">拖拽旋转 · 滚轮缩放 · 右键平移 · 点击查看详情 · 顶部输入 IP 可定位设备</div>
+
+      <!-- 加载中 / 加载失败 -->
+      <div id="loading" class="overlay">
+        <div class="spinner"></div>
+        <div class="overlay-text">正在从 CMDB 读取机柜 / 服务器 / 网络数据…</div>
+      </div>
+      <div id="load-error" class="overlay error hidden"></div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
