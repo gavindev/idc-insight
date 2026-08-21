@@ -5,3 +5,4 @@ cmdb.db
 cmdb.db-wal
 cmdb.db-shm
 *.log
+.git-credentials
