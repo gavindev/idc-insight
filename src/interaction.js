@@ -139,8 +139,10 @@ export function setupInteraction(app) {
     let camPos;
 
     if (dataObj.kind === 'rack') {
-      target = pos.clone().add(new THREE.Vector3(0, 0.35, 0));
-      camPos = pos.clone().add(new THREE.Vector3(0, 0.75, 2.7));
+      // 正面视角：相机高度只比机柜顶(2.06m)略高一点（尽量平视），
+      // 距离 3.4m < 排间距 3.8m，前排机柜始终落在相机身后，不会被遮挡
+      target = pos.clone().add(new THREE.Vector3(0, 1.0, 0));
+      camPos = pos.clone().add(new THREE.Vector3(0, 2.3, 3.4));
     } else if (dataObj.kind === 'server') {
       target = pos.clone();
       camPos = pos.clone().add(new THREE.Vector3(0, 0.25, 1.2));
