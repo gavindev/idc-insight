@@ -1,8 +1,7 @@
 # IDC 机房数字孪生 · Leaf-Spine
 
 基于 **Three.js** 的 IDC 机房 3D 可视化：5 排机柜、服务器机架（42U，1U/2U/4U 服务器混插）、以及 **Leaf-Spine（叶脊）网络架构**。机柜 / 服务器 / 网络设备数据从 **CMDB（SQLite）** 读取，设备状态用颜色直观表达，面向初级工程师，点击即可查看详情。
-
-<img width="1890" height="929" alt="ScreenShot_2026-08-20_200959_982" src="https://github.com/user-attachments/assets/4d4af58b-45d1-479c-9add-31627b542b28" />
+[![ScreenShot_2026-08-20_200959_982](https://github.com/user-attachments/assets/4d4af58b-45d1-479c-9add-31627b542b28)](https://github.com/user-attachments/assets/4d4af58b-45d1-479c-9add-31627b542b28)
 
 ## 功能
 
