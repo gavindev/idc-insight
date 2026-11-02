@@ -9,6 +9,8 @@ ENV VITE_BASE=/idc_insight/
 RUN npm run build
 
 # 运行阶段：Node 内置 http + node:sqlite，无第三方运行时依赖
+# 注意：Node 22 的 node:sqlite 需 --experimental-sqlite；Node 24 起可去掉该 flag。
+# seed.js 会 import ../src/constants.js，因此 src/ 必须随镜像发布。
 FROM node:22-alpine
 WORKDIR /app
 ENV NODE_ENV=production \
@@ -16,7 +18,8 @@ ENV NODE_ENV=production \
     CMDB_DB=/data/cmdb.db
 COPY package.json ./
 COPY server ./server
+COPY src ./src
 COPY --from=build /app/dist ./dist
 VOLUME ["/data"]
 EXPOSE 8787
-CMD ["node", "server/server.js"]
+CMD ["node", "--experimental-sqlite", "server/server.js"]
