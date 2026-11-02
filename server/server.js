@@ -3,6 +3,7 @@
 //   - 打开/初始化 cmdb.db（SQLite）
 //   - GET /api/cmdb  返回机柜/服务器/网络设备/链路快照
 //   - 生产模式下同时托管 dist/ 静态文件
+//   - 支持 /idc_insight/ 路径前缀（同域反代），同时兼容根路径访问
 // ============================================================
 
 import http from 'node:http';
@@ -18,6 +19,17 @@ const ROOT = path.resolve(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
 const DB_PATH = process.env.CMDB_DB || path.join(ROOT, 'cmdb.db');
 const PORT = Number(process.env.PORT || 8787);
+
+// 同域路径前缀：生产环境通过 nginx/Ingress 挂在 /idc_insight/ 下，
+// 同时兼容直接以根路径访问（:30312）。前缀剥离在此统一处理。
+const PREFIX = '/idc_insight';
+
+function stripPrefix(pathname) {
+  if (pathname === PREFIX || pathname.startsWith(PREFIX + '/')) {
+    return pathname.slice(PREFIX.length) || '/';
+  }
+  return pathname;
+}
 
 const db = new DatabaseSync(DB_PATH);
 db.exec('PRAGMA journal_mode = WAL;');
@@ -64,6 +76,7 @@ const MIME = {
 };
 
 async function serveStatic(res, pathname) {
+  pathname = stripPrefix(pathname);
   let rel = pathname === '/' ? '/index.html' : pathname;
   const filePath = path.normalize(path.join(DIST, rel));
   if (!filePath.startsWith(DIST)) {
@@ -91,21 +104,22 @@ async function serveStatic(res, pathname) {
 
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, 'http://localhost');
+  const pathname = stripPrefix(url.pathname);
 
-  if (url.pathname === '/api/cmdb') {
+  if (pathname === '/api/cmdb') {
     res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
     res.end(JSON.stringify(getCmdb()));
     return;
   }
 
-  if (url.pathname === '/api/health') {
+  if (pathname === '/api/health') {
     res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
     res.end(JSON.stringify({ ok: true }));
     return;
   }
 
   if (existsSync(DIST)) {
-    await serveStatic(res, url.pathname);
+    await serveStatic(res, pathname);
   } else {
     res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
     res.end('前端未构建：请先运行 npm run build（开发模式请用 npm run dev）');

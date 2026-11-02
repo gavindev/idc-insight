@@ -81,3 +81,16 @@ cmdb.db               # SQLite CMDB 数据库（首次运行自动生成）
 - **后端 / 数据**：Node 内置 `node:sqlite`（`DatabaseSync`），无第三方原生依赖；暴露 `/api/cmdb` REST 快照，生产模式同时托管 `dist/`。
 
 对接真实 CMDB 时，只需让 `/api/cmdb` 返回相同结构（`rows/racks/servers/devices/links`），前端无需改动。
+
+
+## Docker 镜像
+
+镜像构建时注入 `VITE_BASE=/idc_insight/`；服务端会剥离该前缀，因此
+`https://demo.srelesson.site/idc_insight/` 与直连 `:8787/` 两种入口都可用。
+
+```bash
+docker build -t idc-insight:$(date +%Y%m%d-%H%M) .
+docker run -d --name idc-insight -p 8787:8787 \
+  -v /data:/data -e PORT=8787 -e CMDB_DB=/data/cmdb.db idc-insight:latest
+curl -s http://127.0.0.1:8787/idc_insight/api/health
+```
